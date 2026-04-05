@@ -11,9 +11,27 @@
         "url": "https://github.com/CTCaer/hekate/releases/tag/v6.5.2"
       },
       {
+        "version": "6.5.1",
+        "file": "hekate_ctcaer_6.5.1.bin",
+        "date": "2026-01-20",
+        "url": "https://github.com/CTCaer/hekate/releases/tag/v6.5.1"
+      },
+      {
+        "version": "6.5.0",
+        "file": "hekate_ctcaer_6.5.0.bin",
+        "date": "2026-01-14",
+        "url": "https://github.com/CTCaer/hekate/releases/tag/v6.5.0"
+      },
+      {
+        "version": "6.4.2",
+        "file": "hekate_ctcaer_6.4.2.bin",
+        "date": "2025-12-02",
+        "url": "https://github.com/CTCaer/hekate/releases/tag/v6.4.2"
+      },
+      {
         "version": "6.4.1",
         "file": "hekate_ctcaer_6.4.1.bin",
-        "date": "2024-01-15",
+        "date": "2025-11-16",
         "url": "https://github.com/CTCaer/hekate/releases/tag/v6.4.1"
       }
     ]
@@ -30,10 +48,28 @@
         "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.11.0"
       },
       {
+        "version": "1.10.2",
+        "file": "fusee_1.10.2.bin",
+        "date": "2026-01-14",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.10.2"
+      },
+      {
+        "version": "1.10.1",
+        "file": "fusee_1.10.1.bin",
+        "date": "2025-12-09",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.10.1"
+      },
+      {
         "version": "1.10.0",
         "file": "fusee_1.10.0.bin",
-        "date": "2024-01-01",
+        "date": "2025-11-15",
         "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.10.0-prerelease"
+      },
+      {
+        "version": "1.9.5",
+        "file": "fusee_1.9.5.bin",
+        "date": "2025-09-30",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.9.5"
       }
     ]
   },
