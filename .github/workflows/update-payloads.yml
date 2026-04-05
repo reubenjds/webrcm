@@ -1,0 +1,44 @@
+name: Update Payloads
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update-payloads:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Run payload update script
+        id: update
+        run: pnpm tsx scripts/update-payloads.ts
+      
+      - name: Commit and push changes
+        if: steps.update.outputs.updated == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/payloads/
+          git commit -m "chore: update payloads to latest versions"
+          git push

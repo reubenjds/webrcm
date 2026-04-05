@@ -1,0 +1,42 @@
+{
+  "hekate": {
+    "name": "CTCaer Hekate",
+    "repo": "CTCaer/hekate",
+    "latest": "6.5.2",
+    "versions": [
+      {
+        "version": "6.5.2",
+        "file": "hekate_ctcaer_6.5.2.bin",
+        "date": "2026-03-19",
+        "url": "https://github.com/CTCaer/hekate/releases/tag/v6.5.2"
+      },
+      {
+        "version": "6.4.1",
+        "file": "hekate_ctcaer_6.4.1.bin",
+        "date": "2024-01-15",
+        "url": "https://github.com/CTCaer/hekate/releases/tag/v6.4.1"
+      }
+    ]
+  },
+  "fusee": {
+    "name": "Atmosphere Fusee",
+    "repo": "Atmosphere-NX/Atmosphere",
+    "latest": "1.11.0",
+    "versions": [
+      {
+        "version": "1.11.0",
+        "file": "fusee_1.11.0.bin",
+        "date": "2026-04-03",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.11.0"
+      },
+      {
+        "version": "1.10.0",
+        "file": "fusee_1.10.0.bin",
+        "date": "2024-01-01",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.10.0-prerelease"
+      }
+    ]
+  },
+  "lastUpdated": "2026-04-05T00:00:00Z",
+  "maxVersionsToKeep": 10
+}
