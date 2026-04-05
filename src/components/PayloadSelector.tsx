@@ -90,7 +90,7 @@ export function PayloadSelector({
                   >
                     {versions.map((v) => (
                       <option key={v.version} value={v.version}>
-                        v{v.version} {v.version === manifest?.[option.type].latest ? '(latest)' : ''}
+                        v{v.version} {option.type !== 'custom' && v.version === manifest?.[option.type as 'hekate' | 'fusee'].latest ? '(latest)' : ''}
                       </option>
                     ))}
                   </select>
