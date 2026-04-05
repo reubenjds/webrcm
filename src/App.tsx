@@ -1,121 +1,158 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Header,
+  PayloadSelector,
+  FileUpload,
+  ExecuteButton,
+  LogOutput,
+  Instructions,
+  Compatibility,
+  Footer,
+  ToastContainer,
+} from './components';
+import { useWebUSB } from './hooks/useWebUSB';
+import type { PayloadType, PayloadManifest, PayloadSelection } from './types';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Manifest state
+  const [manifest, setManifest] = useState<PayloadManifest | null>(null);
+  const [manifestError, setManifestError] = useState<string | null>(null);
+
+  // Selection state
+  const [selectedType, setSelectedType] = useState<PayloadType>('hekate');
+  const [selectedVersion, setSelectedVersion] = useState<string>('');
+  const [customFile, setCustomFile] = useState<File | null>(null);
+
+  // WebUSB hook
+  const { logs, state, isSupported, execute, clearLogs } = useWebUSB();
+
+  // Load manifest on mount
+  useEffect(() => {
+    fetch('./payloads/manifest.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load manifest');
+        return res.json();
+      })
+      .then((data: PayloadManifest) => {
+        setManifest(data);
+        // Set default version to latest
+        setSelectedVersion(data.hekate.latest);
+      })
+      .catch((err) => {
+        setManifestError(err.message);
+      });
+  }, []);
+
+  // Update version when type changes
+  const handleTypeChange = useCallback(
+    (type: PayloadType) => {
+      setSelectedType(type);
+      if (manifest && type !== 'custom') {
+        setSelectedVersion(manifest[type].latest);
+      }
+    },
+    [manifest]
+  );
+
+  // Handle custom file selection
+  const handleFileChange = useCallback((file: File | null) => {
+    setCustomFile(file);
+    if (file) {
+      setSelectedType('custom');
+    }
+  }, []);
+
+  // Execute payload
+  const handleExecute = useCallback(() => {
+    if (!manifest && selectedType !== 'custom') {
+      return;
+    }
+
+    const selection: PayloadSelection = {
+      type: selectedType,
+      version: selectedVersion,
+      file: customFile || undefined,
+    };
+
+    execute(selection, manifest!);
+  }, [manifest, selectedType, selectedVersion, customFile, execute]);
+
+  // Check if execute should be disabled
+  const isExecuteDisabled =
+    !isSupported ||
+    (selectedType === 'custom' && !customFile) ||
+    (selectedType !== 'custom' && !manifest);
+
+  const isLoading = state === 'connecting' || state === 'sending' || state === 'triggering';
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-base-100 flex flex-col">
+      <ToastContainer logs={logs} />
+      
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
+        <Header />
 
-      <div className="ticks"></div>
+        {/* Error loading manifest */}
+        {manifestError && (
+          <div className="alert alert-error mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Failed to load payload manifest: {manifestError}</span>
+          </div>
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Main Card */}
+        <div className="card bg-base-200 shadow-xl mb-6">
+          <div className="card-body">
+            <PayloadSelector
+              manifest={manifest}
+              selectedType={selectedType}
+              selectedVersion={selectedVersion}
+              onTypeChange={handleTypeChange}
+              onVersionChange={setSelectedVersion}
+              disabled={isLoading}
+            />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <FileUpload
+              file={customFile}
+              onFileChange={handleFileChange}
+              disabled={isLoading}
+              visible={selectedType === 'custom'}
+            />
+
+            <div className="divider"></div>
+
+            <ExecuteButton
+              state={state}
+              onClick={handleExecute}
+              disabled={isExecuteDisabled}
+            />
+
+            <LogOutput logs={logs} onClear={clearLogs} />
+          </div>
+        </div>
+
+        {/* Info Sections */}
+        <div className="space-y-4">
+          <Instructions />
+          <Compatibility isSupported={isSupported} />
+        </div>
+
+        <Footer />
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
