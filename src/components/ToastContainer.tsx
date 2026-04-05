@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import type { LogEntry } from '../types';
 
 interface Toast {
@@ -13,32 +13,42 @@ interface ToastContainerProps {
 
 export function ToastContainer({ logs }: ToastContainerProps) {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const processedLogsRef = useRef<Set<string>>(new Set());
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // Watch for important log entries and show as toasts
+  // Process new logs and create toasts for success/error messages
+  // Using a ref to track processed logs to avoid duplicate toasts
   useEffect(() => {
-    if (logs.length === 0) return;
+    logs.forEach((log) => {
+      if (processedLogsRef.current.has(log.id)) return;
+      
+      if (log.type === 'success' || log.type === 'error') {
+        processedLogsRef.current.add(log.id);
+        
+        const toast: Toast = {
+          id: log.id,
+          message: log.message,
+          type: log.type,
+        };
 
-    const lastLog = logs[logs.length - 1];
-    
-    // Only show toasts for success/error messages
-    if (lastLog.type === 'success' || lastLog.type === 'error') {
-      const toast: Toast = {
-        id: lastLog.id,
-        message: lastLog.message,
-        type: lastLog.type,
-      };
+        // Use a microtask to batch state updates
+        queueMicrotask(() => {
+          setToasts((prev) => {
+            // Prevent duplicates
+            if (prev.some((t) => t.id === toast.id)) return prev;
+            return [...prev, toast];
+          });
+        });
 
-      setToasts((prev) => [...prev, toast]);
-
-      // Auto-remove after 5 seconds
-      setTimeout(() => {
-        removeToast(toast.id);
-      }, 5000);
-    }
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          removeToast(toast.id);
+        }, 5000);
+      }
+    });
   }, [logs, removeToast]);
 
   if (toasts.length === 0) return null;
