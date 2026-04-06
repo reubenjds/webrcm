@@ -71,12 +71,14 @@ export function ToastContainer({ logs }: ToastContainerProps) {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`alert ${getAlertClass(toast.type)} shadow-lg max-w-sm`}
+          className={`alert ${getAlertClass(toast.type)} shadow-lg w-72 py-2 px-3`}
+          style={{ display: 'flex', justifyContent: 'space-between' }}
         >
           <span className="text-sm">{toast.message}</span>
           <button
-            className="btn btn-ghost btn-xs"
+            className="btn btn-ghost btn-xs btn-square ml-2"
             onClick={() => removeToast(toast.id)}
+            aria-label="Close"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
