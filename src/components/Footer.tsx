@@ -64,7 +64,11 @@ export function Footer() {
       </p>
       
       <p className="text-xs mt-2">
-        MIT License &bull; Use at your own risk
+        For educational and homebrew purposes only. Use at your own risk.
+      </p>
+      
+      <p className="text-xs mt-1">
+        MIT License
       </p>
     </footer>
   );
