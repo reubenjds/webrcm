@@ -37,12 +37,12 @@ export function ExecuteButton({ state, onClick, disabled = false }: ExecuteButto
   return (
     <button
       type="button"
-      className={`btn btn-lg w-full ${getButtonClass()} ${isLoading ? 'loading' : ''}`}
+      className={`btn btn-lg w-full ${getButtonClass()}`}
       onClick={onClick}
       disabled={disabled || isLoading}
     >
       {isLoading && (
-        <span className="loading loading-spinner loading-md"></span>
+        <span className='loading loading-spinner loading-sm'></span>
       )}
       {getButtonText()}
     </button>
