@@ -45,6 +45,15 @@ export function Footer() {
       <p className="text-xs">
         Credits:{' '}
         <a
+          href="https://github.com/webrcm/webrcm.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link link-hover"
+        >
+          webrcm
+        </a>
+        {' '}&bull;{' '}
+        <a
           href="https://github.com/atlas44/web-fusee-launcher"
           target="_blank"
           rel="noopener noreferrer"
