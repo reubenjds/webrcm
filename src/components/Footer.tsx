@@ -9,7 +9,7 @@ export function Footer() {
       
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4">
         <a
-          href="https://github.com/webrcm/webrcm.github.io"
+          href="https://github.com/reubenjds/webrcm"
           target="_blank"
           rel="noopener noreferrer"
           className="link link-hover"
