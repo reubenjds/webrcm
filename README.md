@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# WebRCM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web-based Fusee Gelée exploit tool for Nintendo Switch using WebUSB.
 
-Currently, two official plugins are available:
+**Live Site:** https://reubenjds.github.io/webrcm/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## About
 
-## React Compiler
+WebRCM allows you to send payloads (like Hekate or Fusee/Atmosphere) to a Nintendo Switch in RCM mode directly from your browser - no software installation required.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project is a modernized rewrite of previous web-based RCM tools. I created it because I wanted:
+- **Up-to-date payload releases** - Automated daily checks for new Hekate and Fusee releases via GitHub Actions
+- **A payload version library** - Keep the latest several versions available, so you can choose exactly which version to inject
 
-## Expanding the ESLint configuration
+## Compatibility
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Supported Platforms
+- Linux
+- macOS
+- Android (unrooted)
+- ChromeOS
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Supported Browsers
+- Chrome
+- Edge
+- Opera
+- Samsung Internet
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Not Supported
+- **Windows** - WebUSB cannot access the Switch due to driver limitations
+- Safari, Firefox - No WebUSB support
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+> **Windows users:** Use [TegraRcmGUI](https://github.com/eliboa/TegraRcmGUI) instead.
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run dev server
+pnpm dev
+
+# Build for production
+pnpm build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Credits
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This project builds upon the work of others who came before:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [webrcm](https://github.com/webrcm/webrcm.github.io) - Original WebRCM project
+- [web-fusee-launcher](https://github.com/atlas44/web-fusee-launcher) - Web-based Fusee launcher by atlas44
+
+## License
+
+MIT License - Use at your own risk.
