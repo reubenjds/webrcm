@@ -4,7 +4,7 @@ A modern web-based Fusee Gelée exploit tool for Nintendo Switch using WebUSB.
 
 **Live Site:** https://reubenjds.github.io/webrcm/
 
-If you like this project, please consider giving it a ⭐ on GitHub!
+If you like this project, please consider giving it a ⭐
 
 ## About
 
