@@ -42,8 +42,8 @@ export function Instructions({ defaultOpen = false }: InstructionsProps) {
           {steps.map((step, index) => (
             <li key={index} className="step" data-content={index + 1}>
               <div className="text-left ml-4">
-                <h4 className="font-medium">{step.title}</h4>
-                <p className="text-sm text-base-content/70">{step.description}</p>
+                <h4 className="font-medium text-base text-base-content/90">{step.title}</h4>
+                <p className="text-sm text-base-content/60 py-1">{step.description}</p>
               </div>
             </li>
           ))}
