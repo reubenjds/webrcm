@@ -59,19 +59,8 @@ export function Footer() {
           rel="noopener noreferrer"
           className="link link-hover"
         >
-          atlas44
+          web-fusee-launcher
         </a>
-        {' '}&bull;{' '}
-        <a
-          href="https://github.com/CletusOnTop"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="link link-hover"
-        >
-          CletusOnTop
-        </a>
-        {' '}&bull;{' '}
-        ktemkin &bull; ReSwitched
       </p>
       
       <p className="text-xs mt-2">
