@@ -4,29 +4,35 @@ A modern web-based Fusee Gelée exploit tool for Nintendo Switch using WebUSB.
 
 **Live Site:** https://reubenjds.github.io/webrcm/
 
+If you like this project, please consider giving it a ⭐ on GitHub!
+
 ## About
 
 WebRCM allows you to send payloads (like Hekate or Fusee/Atmosphere) to a Nintendo Switch in RCM mode directly from your browser - no software installation required.
 
 This project is a modernized rewrite of previous web-based RCM tools. I created it because I wanted:
+
 - **Up-to-date payload releases** - Automated daily checks for new Hekate and Fusee releases via GitHub Actions
 - **A payload version library** - Keep the latest several versions available, so you can choose exactly which version to inject
 
 ## Compatibility
 
 ### Supported Platforms
+
 - Linux
 - macOS
 - Android (unrooted)
 - ChromeOS
 
 ### Supported Browsers
+
 - Chrome
 - Edge
 - Opera
 - Samsung Internet
 
 ### Not Supported
+
 - **Windows** - WebUSB cannot access the Switch due to driver limitations
 - Safari, Firefox - No WebUSB support
 
