@@ -104,17 +104,25 @@ export async function launchPayload(
   // Trigger the vulnerability
   log('Triggering vulnerability...', 'info');
 
+  // The device disconnects on success, so controlTransferIn may hang or throw.
+  // We race against a timeout to ensure we don't get stuck.
+  const triggerPromise = device.controlTransferIn(
+    {
+      requestType: 'standard',
+      recipient: 'interface',
+      request: 0x00,
+      value: 0x00,
+      index: 0x00,
+    },
+    VULNERABILITY_LENGTH
+  );
+
+  const timeoutPromise = new Promise<void>((resolve) => {
+    setTimeout(resolve, 1000);
+  });
+
   try {
-    await device.controlTransferIn(
-      {
-        requestType: 'standard',
-        recipient: 'interface',
-        request: 0x00,
-        value: 0x00,
-        index: 0x00,
-      },
-      VULNERABILITY_LENGTH
-    );
+    await Promise.race([triggerPromise, timeoutPromise]);
   } catch {
     // The device will disconnect when the exploit triggers successfully
     // So an error here is actually expected/good
