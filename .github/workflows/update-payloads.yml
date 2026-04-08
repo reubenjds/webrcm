@@ -8,10 +8,14 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   update-payloads:
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.update.outputs.updated }}
     
     steps:
       - name: Checkout repository
@@ -42,3 +46,8 @@ jobs:
           git add public/payloads/
           git commit -m "chore: update payloads to latest versions"
           git push
+
+  trigger-deploy:
+    needs: update-payloads
+    if: needs.update-payloads.outputs.updated == 'true'
+    uses: ./.github/workflows/deploy.yml
