@@ -7,9 +7,8 @@ on:
   workflow_dispatch: # Allow manual trigger
 
 permissions:
+  actions: write
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   update-payloads:
@@ -50,4 +49,9 @@ jobs:
   trigger-deploy:
     needs: update-payloads
     if: needs.update-payloads.outputs.updated == 'true'
-    uses: ./.github/workflows/deploy.yml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger GitHub Pages deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
