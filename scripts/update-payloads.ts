@@ -238,10 +238,19 @@ async function main() {
   
   const manifest = loadManifest();
   let updated = false;
+  const updatedPayloads: string[] = [];
   
   try {
     const hekateUpdated = await checkAndUpdateHekate(manifest);
     const fuseeUpdated = await checkAndUpdateFusee(manifest);
+
+    if (hekateUpdated) {
+      updatedPayloads.push(`Hekate to v${manifest.hekate.latest}`);
+    }
+    if (fuseeUpdated) {
+      updatedPayloads.push(`Fusee to v${manifest.fusee.latest}`);
+    }
+
     updated = hekateUpdated || fuseeUpdated;
   } catch (error) {
     console.error('Error during update:', error);
@@ -251,9 +260,16 @@ async function main() {
   if (updated) {
     saveManifest(manifest);
     console.log('\nManifest updated successfully!');
+
+    const commitMessage = `chore(payloads): update ${updatedPayloads.join(' and ')}`;
+    console.log(`Commit message: ${commitMessage}`);
+
     // Set output for GitHub Actions
     if (process.env.GITHUB_OUTPUT) {
-      fs.appendFileSync(process.env.GITHUB_OUTPUT, 'updated=true\n');
+      fs.appendFileSync(
+        process.env.GITHUB_OUTPUT,
+        `updated=true\ncommit_message=${commitMessage}\n`
+      );
     }
   } else {
     console.log('\nNo updates available.');

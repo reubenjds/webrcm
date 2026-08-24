@@ -13,45 +13,41 @@ permissions:
 jobs:
   update-payloads:
     runs-on: ubuntu-latest
-    outputs:
-      updated: ${{ steps.update.outputs.updated }}
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Install dependencies
         run: pnpm install
-      
+
       - name: Run payload update script
         id: update
         run: pnpm tsx scripts/update-payloads.ts
-      
+
       - name: Commit and push changes
         if: steps.update.outputs.updated == 'true'
+        env:
+          COMMIT_MESSAGE: ${{ steps.update.outputs.commit_message }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add public/payloads/
-          git commit -m "chore: update payloads to latest versions"
+          git commit -m "$COMMIT_MESSAGE"
           git push
 
-  trigger-deploy:
-    needs: update-payloads
-    if: needs.update-payloads.outputs.updated == 'true'
-    runs-on: ubuntu-latest
-    steps:
       - name: Trigger GitHub Pages deployment
+        if: steps.update.outputs.updated == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
