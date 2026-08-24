@@ -52,6 +52,7 @@ declare global {
 // Payload manifest types
 export interface PayloadVersion {
   version: string;
+  prerelease: boolean;
   file: string;
   date: string;
   url: string;

@@ -13,6 +13,32 @@ import {
 import { useWebUSB } from './hooks/useWebUSB';
 import type { PayloadType, PayloadManifest, PayloadSelection } from './types';
 
+const PAYLOAD_PREFERENCE_KEY = 'webrcm-payload-preference';
+
+interface PayloadPreference {
+  type: Exclude<PayloadType, 'custom'>;
+  version: string;
+}
+
+function loadPayloadPreference(): PayloadPreference | null {
+  try {
+    const stored = localStorage.getItem(PAYLOAD_PREFERENCE_KEY);
+    if (!stored) return null;
+
+    const preference = JSON.parse(stored) as Partial<PayloadPreference>;
+    if (
+      (preference.type === 'hekate' || preference.type === 'fusee') &&
+      typeof preference.version === 'string'
+    ) {
+      return preference as PayloadPreference;
+    }
+  } catch {
+    // Local storage can be unavailable in privacy-focused browser modes.
+  }
+
+  return null;
+}
+
 function App() {
   // Manifest state
   const [manifest, setManifest] = useState<PayloadManifest | null>(null);
@@ -35,13 +61,38 @@ function App() {
       })
       .then((data: PayloadManifest) => {
         setManifest(data);
-        // Set default version to latest
-        setSelectedVersion(data.hekate.latest);
+
+        const preference = loadPayloadPreference();
+        if (preference) {
+          const payload = data[preference.type];
+          const versionExists = payload.versions.some(
+            (version) => version.version === preference.version
+          );
+
+          setSelectedType(preference.type);
+          setSelectedVersion(versionExists ? preference.version : payload.latest);
+        } else {
+          setSelectedVersion(data.hekate.latest);
+        }
       })
       .catch((err) => {
         setManifestError(err.message);
       });
   }, []);
+
+  // Remember the last built-in payload and version. Browsers cannot restore custom files.
+  useEffect(() => {
+    if (!manifest || selectedType === 'custom' || !selectedVersion) return;
+
+    try {
+      localStorage.setItem(
+        PAYLOAD_PREFERENCE_KEY,
+        JSON.stringify({ type: selectedType, version: selectedVersion })
+      );
+    } catch {
+      // Launching still works when local storage is unavailable.
+    }
+  }, [manifest, selectedType, selectedVersion]);
 
   // Update version when type changes
   const handleTypeChange = useCallback(
@@ -89,7 +140,7 @@ function App() {
     <div className="min-h-screen bg-base-100 flex flex-col">
       <ToastContainer logs={logs} />
       
-      <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
+      <main className="flex-1 container mx-auto max-w-2xl px-3 py-5 sm:px-4 sm:py-8">
         <Header />
 
         {/* Error loading manifest */}
@@ -113,8 +164,8 @@ function App() {
         )}
 
         {/* Main Card */}
-        <div className="card bg-base-200 shadow-xl mb-6">
-          <div className="card-body">
+        <div className="card mb-4 bg-base-200 shadow-xl sm:mb-6">
+          <div className="card-body p-3 sm:p-6">
             <PayloadSelector
               manifest={manifest}
               selectedType={selectedType}
@@ -131,7 +182,7 @@ function App() {
               visible={selectedType === 'custom'}
             />
 
-            <div className="divider"></div>
+            <div className="divider my-2 sm:my-4"></div>
 
             <ExecuteButton
               state={state}
@@ -144,7 +195,7 @@ function App() {
         </div>
 
         {/* Info Sections */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <Instructions />
           <Compatibility isSupported={isSupported} />
         </div>

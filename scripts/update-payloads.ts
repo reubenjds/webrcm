@@ -11,6 +11,7 @@ import * as https from 'https';
 
 interface PayloadVersion {
   version: string;
+  prerelease: boolean;
   file: string;
   date: string;
   url: string;
@@ -32,6 +33,7 @@ interface Manifest {
 
 interface GitHubRelease {
   tag_name: string;
+  prerelease: boolean;
   published_at: string;
   html_url: string;
   assets: Array<{
@@ -147,6 +149,7 @@ async function checkAndUpdateHekate(manifest: Manifest): Promise<boolean> {
   // Update manifest
   const newVersion: PayloadVersion = {
     version,
+    prerelease: release.prerelease,
     file: fileName,
     date: release.published_at.split('T')[0],
     url: release.html_url,
@@ -204,6 +207,7 @@ async function checkAndUpdateFusee(manifest: Manifest): Promise<boolean> {
   // Update manifest
   const newVersion: PayloadVersion = {
     version,
+    prerelease: release.prerelease,
     file: fileName,
     date: release.published_at.split('T')[0],
     url: release.html_url,
