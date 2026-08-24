@@ -37,7 +37,7 @@ export function ExecuteButton({ state, onClick, disabled = false }: ExecuteButto
   return (
     <button
       type="button"
-      className={`btn btn-lg w-full ${getButtonClass()}`}
+      className={`btn btn-md w-full sm:btn-lg ${getButtonClass()}`}
       onClick={onClick}
       disabled={disabled || isLoading}
     >

@@ -57,7 +57,7 @@ export function LogOutput({ logs, onClear }: LogOutputProps) {
       
       <div
         ref={containerRef}
-        className="log-output bg-base-300 rounded-lg p-4 h-48 overflow-y-auto font-mono text-sm"
+        className="log-output h-32 overflow-y-auto rounded-lg bg-base-300 p-3 font-mono text-xs sm:h-48 sm:p-4 sm:text-sm"
       >
         {logs.length === 0 ? (
           <span className="text-base-content/40">

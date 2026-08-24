@@ -8,11 +8,11 @@ export function Header({
   subtitle = 'Web-based Fusee Launcher for Nintendo Switch' 
 }: HeaderProps) {
   return (
-    <header className="text-center mb-8">
-      <h1 className="text-4xl md:text-5xl font-bold text-base-content mb-2">
+    <header className="mb-6 text-center sm:mb-8">
+      <h1 className="mb-2 text-3xl font-bold text-base-content sm:text-4xl md:text-5xl">
         {title}
       </h1>
-      <p className="text-base-content/70 text-lg">
+      <p className="text-base text-base-content/70 sm:text-lg">
         {subtitle}
       </p>
     </header>
