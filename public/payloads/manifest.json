@@ -58,8 +58,15 @@
   "fusee": {
     "name": "Atmosphere Fusee",
     "repo": "Atmosphere-NX/Atmosphere",
-    "latest": "1.12.0",
+    "latest": "1.12.1",
     "versions": [
+      {
+        "version": "1.12.1",
+        "prerelease": false,
+        "file": "fusee_1.12.1.bin",
+        "date": "2026-10-16",
+        "url": "https://github.com/Atmosphere-NX/Atmosphere/releases/tag/1.12.1"
+      },
       {
         "version": "1.12.0",
         "prerelease": false,
@@ -118,6 +125,6 @@
       }
     ]
   },
-  "lastUpdated": "2026-09-28T03:25:01.797Z",
+  "lastUpdated": "2026-10-16T02:58:19.567Z",
   "maxVersionsToKeep": 10
 }
